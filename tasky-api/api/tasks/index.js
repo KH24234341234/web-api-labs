@@ -20,7 +20,8 @@ router.get('/:id', (req, res) => {
     return res.status(200).json(task);
 });
 
-//Add a task
+//Add a task (new bits created at and updated at data points)
+//forgot comma before done ... 
 router.post('/', (req, res) => {
     const { title, description, deadline, priority, done } = req.body;
     const newTask = {
@@ -29,6 +30,8 @@ router.post('/', (req, res) => {
         description,
         deadline,
         priority,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
         done
     };
     tasksData.tasks.push(newTask);
@@ -36,14 +39,14 @@ router.post('/', (req, res) => {
     tasksData.total_results++;
 });
 
-//Update an existing task
+//Update an existing task (added to the end of const updated task the new (updated_at) created earlier)
 router.put('/:id', (req, res) => {
     const { id } = req.params;
     const taskIndex = tasksData.tasks.findIndex(task => task.id === id); 
     if (taskIndex === -1) {
         return res.status(404).json({ status: 404, message: 'Task not found' });
     }
-    const updatedTask = { ...tasksData.tasks[taskIndex], ...req.body, id:id };
+    const updatedTask = { ...tasksData.tasks[taskIndex], ...req.body, id:id, updated_at:new Date().toISOString() };
     tasksData.tasks[taskIndex] = updatedTask;
     res.json(updatedTask);
 });
